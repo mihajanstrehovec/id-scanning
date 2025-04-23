@@ -90,6 +90,11 @@ const IDBoltScanner = () => {
       console.log('Slovenian ID card detected');
       IdBoltSession.terminate();
       setOpen(true);
+      // start another scan for the back side of the document
+      // with timeout to allow the first scan to close
+      // setTimeout(() => {
+      //   startIdBolt(onCompletionCallback, 'Please scan the back side of your document');
+      // }, 500);
     }
   };
 
