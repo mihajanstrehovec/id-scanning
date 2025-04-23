@@ -1,0 +1,18 @@
+#root {
+  max-width: 750px;
+  margin: 0 auto;
+}
+
+body{
+  font-family: 'Arial', sans-serif;
+  background-color: white;
+  color: #34957B;
+}
+
+button {
+  background-color: #34957B;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
