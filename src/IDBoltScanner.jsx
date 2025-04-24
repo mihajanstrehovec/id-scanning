@@ -103,9 +103,10 @@ const IDBoltScanner = () => {
 
   return (
     <div>
-      <button onClick={() => startIdBolt(onCompletionCallback)}>Scan ID</button>
-
-      <Card sx={{ padding: 4, marginTop: 2 }} elevation={3}>
+      <Button variant='contained' onClick={() => startIdBolt(onCompletionCallback)} sx={{backgroundColor: '#34957B', fontWeight: 600, '&:focus': { outline: 'none'}}} >Scan ID</Button>
+      <Card sx={{ padding: 4, marginTop: 3, 
+        boxShadow: '0px 2px 0px rgba(0, 0, 0, 0.04), 0px 10px 10px 0px rgba(0, 0, 0, 0.06), 0px 0px 15px 0px rgba(0, 0, 0, 0.06)'
+       }} >
         <Grid container spacing={2}>
           <Grid size={6}>
             <TextField value={scanResult?.capturedId.firstName} fullWidth placeholder="First name"></TextField>
