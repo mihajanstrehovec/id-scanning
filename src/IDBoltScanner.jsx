@@ -8,30 +8,32 @@ import {
   IdCard,
   ReturnDataMode,
   Validators,
-  CancellationReason
+  CancellationReason,
+  FullDocumentScanner
 } from '@scandit/web-id-bolt';
 import { Button, Card, Dialog, DialogContent, DialogTitle, Grid, Stack, TextField } from '@mui/material';
 
+
 const ID_BOLT_URL = 'https://app.id-scanning.com';
 
-const LICENSE_KEY = '';
+const LICENSE_KEY = import.meta.env.VITE_ID_BOLT_SCANNER_KEY
 
 const mapScanditDocumentType = {
-  Passport: 'P',
-  IdCard: 'I',
-  DriverLicense: 'D'
+  Passport: 'Potni list',
+  IdCard: 'Osebna izkaznica',
+  DriverLicense: 'Vozniško dovoljenje',
 };
 
 const mapScanditGender = {
-  male: 'M',
-  female: 'F'
+  male: 'Moški',
+  female: 'Ženska',
 };
 
 const documentSelection = DocumentSelection.create({
   accepted: [new Passport(Region.Any), new DriverLicense(Region.Any), new IdCard(Region.Any)]
 });
 
-const createIDBoltSession = (onCompletionCallback) => {
+const createIDBoltSession = (onCompletionCallback, text) => {
   const idBoltSession = IdBoltSession.create(ID_BOLT_URL, {
     licenseKey: LICENSE_KEY,
     documentSelection,
@@ -42,7 +44,7 @@ const createIDBoltSession = (onCompletionCallback) => {
     textOverrides: {
       'titles.SCANNER_HEADER': "Scan ID card, passport, or driver's license.",
       'titles.LOCAL_SCAN_HEADER': "Scan ID card, passport, or driver's license.",
-      'texts.HELP_SUPPORTED_DOCUMENTS_INCLUDE_LIST_BRIEF': 'Please scan the front side of your document'
+      'texts.HELP_SUPPORTED_DOCUMENTS_INCLUDE_LIST_BRIEF': "Scan ID card, passport, or driver's license.",
     },
     theme: {
       colors: {
@@ -53,6 +55,7 @@ const createIDBoltSession = (onCompletionCallback) => {
         radiusButton: '8px'
       }
     },
+    scanner: new FullDocumentScanner(),
     workflow: {
       showResultScreen: false,
       showWelcomeScreen: true
@@ -75,9 +78,9 @@ const createIDBoltSession = (onCompletionCallback) => {
   return idBoltSession;
 };
 
-const startIdBolt = async (setResult) => {
+const startIdBolt = async (setResult, text) => {
   IdBoltSession.terminate();
-  const session = createIDBoltSession(setResult);
+  const session = createIDBoltSession(setResult, text);
   await session.start();
 };
 
@@ -86,16 +89,16 @@ const IDBoltScanner = () => {
   const [open, setOpen] = useState(null);
   const onCompletionCallback = (result) => {
     setResult(result);
-    if (result.capturedId.documentType === 'IdCard' && result.capturedId.nationality === 'SI' && result.capturedId.documentNumber === '') {
-      console.log('Slovenian ID card detected');
-      IdBoltSession.terminate();
-      setOpen(true);
-      // start another scan for the back side of the document
-      // with timeout to allow the first scan to close
-      // setTimeout(() => {
-      //   startIdBolt(onCompletionCallback, 'Please scan the back side of your document');
-      // }, 500);
-    }
+    // if (result.capturedId.documentType === 'IdCard' && result.capturedId.nationality === 'SI' && result.capturedId.documentNumber === '') {
+    //   console.log('Slovenian ID card detected');
+    //   IdBoltSession.terminate();
+    //   setOpen(true);
+    //   // start another scan for the back side of the document
+    //   // with timeout to allow the first scan to close
+    //   setTimeout(() => {
+    //     startIdBolt(onCompletionCallback, 'Please scan the back side of your document');
+    //   }, 500);
+    // }
   };
 
   return (
