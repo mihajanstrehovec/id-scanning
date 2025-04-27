@@ -39,7 +39,6 @@ const createIDBoltSession = (onCompletionCallback, text) => {
     documentSelection,
     sessionId: 'sessionId',
     returnDataMode: ReturnDataMode.Full,
-    validation: [Validators.notExpired()],
     locale: 'en',
     textOverrides: {
       'titles.SCANNER_HEADER': "Scan ID card, passport, or driver's license.",
